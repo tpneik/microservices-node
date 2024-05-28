@@ -1,0 +1,12 @@
+{
+    "productCode": "SP002",
+    "name": "Túi xách nam đeo chéo",
+    "description": "Túi da thật, kiểu dáng hiện đại, nhiều ngăn tiện dụng",
+    "price": 899000,
+    "images": ["https://example.com/tuixach.jpg"],
+    "category": 5,
+    "sizes": ["One size"],
+    "colors": ["Đen", "Nâu", "Xams"],
+    "stock": 8,
+    "brand": "Charles & Keith"
+  }

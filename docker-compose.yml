@@ -1,0 +1,89 @@
+version: "3.7"
+networks:
+  microservice:
+    driver: bridge
+services:
+  main:
+    build:
+      context: ./nodejs-main-service
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - node_mongo
+      - node_mysql
+    networks:
+      - microservice
+    environment:
+      HOST_NODE_MONGODB: ${HOST_NODE_MONGODB}
+      HOST_NODE_MYSQL: ${HOST_NODE_MYSQL}
+      PORT_NODE_MONGODB: ${PORT_NODE_MONGODB}
+      PORT_NODE_MYSQL: ${PORT_NODE_MYSQL}
+      PORT_MAIN: ${PORT_MAIN}
+  node_mongo:
+    build:
+      context: ./nodejs-mongo-3001
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
+    networks:
+      - microservice
+    environment:
+      PORT_NODE_MONGODB: ${PORT_NODE_MONGODB}
+      PORT_NODE_MYSQL: ${PORT_NODE_MYSQL}
+      MONGO_HOST: ${MONGO_HOST}
+      MONGO_PORT: ${MONGO_PORT}
+      MONGO_USERNAME: ${MONGO_USERNAME}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_DATABASE: ${MONGO_DATABASE}
+      MONGO_SOURCE: ${MONGO_SOURCE}
+  node_mysql:
+    build:
+      context: ./nodejs-mysql-3002
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+    networks:
+      - microservice
+    environment:
+      PORT_NODE_MYSQL: ${PORT_NODE_MYSQL}
+      PORT_NODE_MONGODB: ${PORT_NODE_MONGODB}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_HOST: ${MYSQL_HOST}
+  mongodb:
+    image: mongo:latest
+    restart: unless-stopped
+    volumes:
+      - ./data/mongodb-data:/data/db
+    env_file:
+      - .env
+    networks:
+      - microservice
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+  mysql:
+    image: mariadb:latest
+    restart: unless-stopped
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - microservice
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE : ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      DATABASE_PORT: ${MYSQL_PORT}
+  

@@ -1,0 +1,45 @@
+# Logs and temporary files
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories (managed inside the container)
+node_modules
+.pnp
+.pnp.js
+
+# Development environment settings
+.env
+.env.*
+
+# Build artifacts
+dist
+build
+lib
+out
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor and IDE settings
+.vscode
+.idea
+*.iml
+
+# Git-related (already handled by Docker)
+.git
+.gitignore
+
+# Test and coverage reports
+coverage
+
+# Docker-related (avoid recursion)
+Dockerfile*
+docker-compose*
+
+# Common temporary/generated files
+*.swp
+*~
